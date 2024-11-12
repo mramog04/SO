@@ -1,0 +1,121 @@
+#!/bin/bash
+
+function funcion1()
+{
+    numero_archivos=$(ls -l "$1" | wc -l)
+    echo "El numero de archivos es $numero_archivos"
+}
+function funcion2()
+{
+    numero_subdirectorios=$(find $1 -maxdepth 1 -mindepth 1 -type d | wc -l)
+    echo "El numero de subdirectorios es : $numero_subdirectorios"
+}
+function funcion3()
+{
+    archivo_mas_grande=$(ls -S "$1" | head -n 1)
+    echo El archivo de mayor tamaño es: $archivo_mas_grande
+}
+function funcion4()
+{
+    archivo_mas_pequeno=$(ls -lS "$1" |grep "^-"|sort -n -k 5| head -n 1 | awk '{print $9}')
+    echo El archivo mas pequeño es: $archivo_mas_pequeno
+}
+
+function funcion5()
+{
+    directorio="$1"
+    tamano=$(du -sh "$directorio" | cut -f1)
+    echo "El espacio total ocupado es $tamano"
+}
+
+function funcion6()
+{
+    directorio="$1"
+    ficheros_lec=$(find "$directorio" -type f -perm -u=r | wc -l)
+    echo Hay $ficheros_lec ficheros que tienen permisos de lectura
+}
+
+function funcion7()
+{
+    directorio="$1"
+    ficheros_esc=$(find "$directorio" -type f -perm -u=w | wc -l)
+    echo Hay $ficheros_esc ficheros que tienen permiso de escritura
+}
+
+function funcion8()
+{
+    directorio="$1"
+    ficheros_ejc=$(find "$directorio" -type f -perm -u=x | wc -l)
+    echo Hay $ficheros_ejc ficheros con el permiso de ejecucion
+}
+function funcion9(){
+    directorio="$1"
+    ficheros_ejec_usuario=$(find "$directorio" -type f -perm -u=x | wc -l)
+    ficheros_ejec_grupo=$(find "$directorio" -type f -perm -g=x | wc -l)
+    ficheros_ejec_otros=$(find "$directorio" -type f -perm -o=x | wc -l)
+    ficheros_ejec_tds=$((ficheros_ejec_usuario+ficheros_ejec_grupo+ficheros_ejec_otros))
+    echo Hay $ficheros_ejec_tds ficheros con perrmisos de ejecucionn en todos los usuarios
+}
+function funcion10(){
+    echo Muchas gracias por todo
+    exit 0
+}
+
+	
+if test $# -eq 0
+then
+    directorio=$(dirname "$0")
+elif test $# -gt 1
+then    
+    echo solo puedes pasar un argumento
+    exit 0
+elif test -d $1
+then
+    directorio=$1
+else
+    echo el argumento no es un directorio
+fi
+
+echo Esto es el menu de tu programa, elige la opcion que desee
+echo "1) Numero de archivos" 
+echo "2) Numero de subdirectorios"
+echo "3) Fichero mas grande"
+echo "4) Fichero mas pequeño"
+echo "5) Espacio total ocupado"
+echo "6) Número de ficheros con permiso de lectura para el usuario que ejecuta el scrip"
+echo "7) Número de ficheros con permiso de escritura para el usuario que ejecuta el script"
+echo "8) Número de ficheros con permiso de ejecución para el usuario que ejecuta el scrip"
+echo "9) Ficheros con permiso de ejecucion para todos los usuarios"
+echo "10) Salir"
+while true
+do 
+read input
+    case $input in
+    1) funcion1 $directorio;;
+    2) funcion2 $directorio;;
+    3) funcion3 $directorio;;
+    4) funcion4 $directorio;;
+    5) funcion5 $directorio;;
+    6) funcion6 $directorio;;
+    7) funcion7 $directorio;;
+    8) funcion8 $directorio;;
+    9) funcion9 $directorio;;
+    10)funcion10 ;;
+    *) echo "INTRODUZCA UN NUMERO ENTRE EL 1 Y 10"
+    echo Esto es el menu de tu programa, elige la opcion que desee
+    echo "1) Numero de archivos" 
+    echo "2) Numero de subdirectorios"
+    echo "3) Fichero mas grande"
+    echo "4) Fichero mas pequeño"
+    echo "5) Espacio total ocupado"
+    echo "6) Número de ficheros con permiso de lectura para el usuario que ejecuta el scrip"
+    echo "7) Número de ficheros con permiso de escritura para el usuario que ejecuta el script"
+    echo "8) Número de ficheros con permiso de ejecución para el usuario que ejecuta el scrip"
+    echo "9) Ficheros con permiso de ejecucion para todos los usuarios"
+    echo "10) Salir"
+    esac 
+done
+
+
+
+

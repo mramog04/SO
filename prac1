@@ -1,0 +1,35 @@
+#!/bin/bash
+opcion1(){
+    echo "Has elegido la opcion 1"
+}
+opcion2(){
+    echo "Has elegido la opcion 2"
+}
+opcion3(){
+    echo "Has elegido la opcion 3"
+}
+mostrarMenu(){
+    echo "Esto es el menu: \n"
+    echo "Para la primera opcion pulse 1"
+    echo "Para la segunda opcion pulse 2"
+    echo "Para la tercera opciion 
+}
+
+
+
+
+
+
+var1=$#
+if [ "$var1" -gt 1 ]; then
+    echo "Solo se pude pasar un directorio como argumento"
+    exit
+fi
+directorio="$(dirname "${BASH_SOURCE[0]}")"
+if [ "$var1" -eq 0 ]; then
+    echo "Trabajando en el directorio actual del archivo"
+else
+    echo "Trabajando en el directorio pasado como argumento"
+    directorio="$1"
+fi
+
