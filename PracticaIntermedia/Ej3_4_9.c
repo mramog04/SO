@@ -20,7 +20,7 @@ int main(int argc,char *argv[]){
     }else{
         //usar strncopy
         strncpy(path,argv[1],sizeof(path)-1);
-        path[sizeof(path)-1] = '\0';//no entiendo del todo para lo que sirve esta linea
+        path[sizeof(path)-1] = '\0';
         if(access(path,F_OK)==-1){
             getcwd(path,1024);
             strcat(path,"/archivo.txt");
