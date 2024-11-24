@@ -17,15 +17,14 @@
 struct sigaction sa;
 sigjmp_buf env;
 void handler (int sig) {
-    char op;
+    char op[1024];
     printf ("SIGINT received %d\n", sig);
     while (1) {
-        printf("Quieres salir del programa? (y/n): ");
-        op = fgetc(stdin);
-        while (getchar() != '\n');
-        if (op == 'y') {
+        printf("Quieres salir del programa? (s/n): ");
+        scanf("%s", op);          
+        if (op[0] == 's') {
             exit(0);
-        } else if (op == 'n') {
+        } else if (op[0] == 'n') {
             siglongjmp(env, 1);
         } else {
             printf("Opcion no valida\n");

@@ -11,13 +11,13 @@ int main(int argc,char *argv[]){
     int desc;
     char mensj[4096];
     if(argc== 1){
-        printf("No such file or directory");
+        printf("No such file or directory\n");
         exit(0);
     }else{
         strncpy(path,argv[1],sizeof(path)-1);
         path[sizeof(path)-1] = '\0';
         if(access(path,F_OK)==-1){
-            printf("No such file or directory");
+            printf("No such file or directory\n");
             exit(0);
         }else{
             
