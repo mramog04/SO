@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-
+//Este codigo no esta lo mejor hecho pero mas o menos funciona
 int main(int argc, char *argv[]){
     int path1[1024];
     int path2[1024];

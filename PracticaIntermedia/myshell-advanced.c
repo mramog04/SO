@@ -15,7 +15,6 @@
 #define MAX_TOKEN_LENGTH 100 // Maximum length of each token
 
 struct sigaction sa;
-sigjmp_buf env;
 void handler (int sig) {
     char op[1024];
     printf ("SIGINT received %d\n", sig);
@@ -25,7 +24,7 @@ void handler (int sig) {
         if (op[0] == 's') {
             exit(0);
         } else if (op[0] == 'n') {
-            siglongjmp(env, 1);
+            break;
         } else {
             printf("Opcion no valida\n");
         }
@@ -51,6 +50,7 @@ void tokenize(char *str, char **tokens, int *num_tokens) {
     tokens[*num_tokens] = NULL;
 }
 
+
 int main(){
     char str[1024];
     char *tokens[MAX_TOKENS];
@@ -60,25 +60,29 @@ int main(){
     sa.sa_handler = handler;
     sigaction (SIGINT , &sa , NULL);
 
-    while (1) {
-        printf("Introduce un commando (p.e. ls -l -a): \n");
-        fflush(stdout);
-        sigsetjmp(env,1);
-        if (fgets(str, sizeof(str), stdin) == NULL) {
-            printf("Error al leer la entrada \n");
-            continue;
-        }
-        str[strlen(str) - 1] = '\0';
-        tokenize(str, tokens, &num_tokens);
+
         int pid = fork();
         if (pid == 0) {
-            if (execvp(tokens[0], tokens) == -1) {
-                printf("Error al ejecutar el comando '%s': %s\n", tokens[0], strerror(errno));
+            while (1)
+            {
+                printf("Introduce un commando (p.e. ls -l -a): \n");
+                fflush(stdout);
+                if (fgets(str, sizeof(str), stdin) == NULL) {
+                    printf("%s\n", str);
+                    printf("Error al leer la entrada \n");
+                    continue;
+                }
+                str[strlen(str) - 1] = '\0';
+                tokenize(str, tokens, &num_tokens);
+                if (execvp(tokens[0], tokens) == -1) {
+                    printf("Error al ejecutar el comando '%s': %s\n", tokens[0], strerror(errno));
+                }
             }
-            main();
         } else {
             wait(NULL);
         }
-    }
+
+    
+
     return 0;
 }
