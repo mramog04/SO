@@ -14,10 +14,14 @@
 #define MAX_TOKENS 100 // Maximum number of tokens to parse
 #define MAX_TOKEN_LENGTH 100 // Maximum length of each token
 
-struct sigaction sa;
+struct sigaction sa,sa_ignore;
 
 void handler (int sig) {
-    sigaction(SIGINT, &sa, NULL);
+
+    /* memset(&sa2, 0, sizeof(sa2)); 
+    sa2.sa_handler = SIG_IGN;
+    sigaction (SIGINT , &sa2 , NULL); */
+    sigaction (SIGINT , &sa_ignore , NULL);
     char op[1024];
     while (1) {
         printf("Quieres salir del programa? (s/n): ");
@@ -30,6 +34,7 @@ void handler (int sig) {
             printf("Opcion no valida\n");
         }
     }
+    sigaction (SIGINT , &sa , NULL);
 }
 
 void tokenize(char *str, char **tokens, int *num_tokens) {
@@ -61,11 +66,14 @@ int main(){
     sa.sa_handler = handler;
     sigaction (SIGINT , &sa , NULL);
 
+    memset(&sa_ignore, 0, sizeof(sa_ignore));
+    sa_ignore.sa_handler = SIG_IGN;
+
     printf("Introduce un commando (p.e. ls -l -a): \n");
 
     while (1) {
         if(signalError == 1){
-            printf("Introduce un commando (p.e. ls -l -a): \n");
+            printf("Introduce un commando (p.e. ls -l -a): \n");   
             signalError = 0;
         }
         fflush(stdout);
@@ -80,8 +88,8 @@ int main(){
         if (pid == 0) {
             if (execvp(tokens[0], tokens) == -1) {
                 printf("Error al ejecutar el comando '%s': %s\n", tokens[0], strerror(errno));
+                exit(1);
             }
-            main();
         } else {
             wait(NULL);
         }
