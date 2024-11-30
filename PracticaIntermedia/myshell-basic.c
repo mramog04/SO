@@ -16,6 +16,7 @@
 
 struct sigaction sa,sa_ignore;
 
+
 void handler (int sig) {
 
     /* memset(&sa2, 0, sizeof(sa2)); 
