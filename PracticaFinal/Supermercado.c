@@ -50,8 +50,8 @@ int ingresosCaja2 = 0;
 int ingresosCaja3 = 0;
 
 
-char logFile[] = "./log.txt";
-char logFileName[] = "log.txt";  
+/* char logFile[] = "./log.txt"; */
+char logFileName[] = "./log.txt";  
 
 Cliente clientes[20];
 pthread_t hilos_clientes[20];
@@ -77,7 +77,8 @@ void handler(int sig) {
             Cliente* new_cliente = malloc(sizeof(Cliente));
             argsHiloCliente* args = (argsHiloCliente*)malloc(sizeof(argsHiloCliente));
             new_cliente->cliente_id = num_clientes+1;
-            strcpy(new_cliente->nombre, "cliente_%d", num_clientes+1);
+            /* new_cliente->nombre = strcpy("cliente_%d", num_clientes+1); */
+            sprintf(new_cliente->nombre, "cliente_%d", num_clientes+1);
             new_cliente->precio_compra = (rand() % 100) + 1;
             new_cliente->tiempo_caja = (rand() % 5) + 1;
             if(((rand() % 100)+1)>90){
@@ -136,20 +137,20 @@ int cliente_libre(){
 }
 
 void *cliente(void *args){
-    argsHiloCliente* args = (argsHiloCliente*)args;
-    int numCliente = args->numCliente;
+    argsHiloCliente* args2 = (argsHiloCliente*)args;
+    int numCliente = args2->numCliente;
     Cliente* cliente = &clientes[numCliente];
     if(cliente->tiempo_cansado == 1) {
         sleep(10);
         pthread_mutex_lock(&sem_clientes[cliente->cliente_id]);
-        if(clientes[cliente.cliente_id].cliente_id == -1) {
+        if(clientes[cliente->cliente_id].cliente_id == -1) {
             pthread_mutex_unlock(&sem_clientes[cliente->cliente_id]);
             pthread_exit(NULL);
         }
         pthread_mutex_lock(&mutex_log);
         writeLogMessage(cliente->nombre, "Cliente cansado, se marcha de la cola");
         pthread_mutex_unlock(&mutex_log);
-        clientes[cliente->cliente_id] = NULL;
+        iniciarCliente(&clientes[cliente->cliente_id]);
         pthread_mutex_unlock(&sem_clientes[cliente->cliente_id]);
         pthread_exit(NULL);
     }
@@ -166,7 +167,7 @@ void *caja_1(void *prc){
     Cliente* cliente = (Cliente*)prc;
     if(cliente->problema_precio==1){
         //Llamamos al repo
-        msg = "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 1";
+        strcpy(msg, "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 1");
         pthread_mutex_lock(&mutex_repo);
         pthread_cond_signal(&cond_repo);
         pthread_mutex_unlock(&mutex_repo);
@@ -179,7 +180,7 @@ void *caja_1(void *prc){
     }
     ingresosCaja1 = ingresosCaja1 + cliente->precio_compra;
     sleep(cliente->tiempo_caja);
-    writeLogMessage(cliente->nombre, msg + "Ha sido atendido en la caja 1");
+    writeLogMessage(cliente->nombre, strcat(msg,"Ha sido atendido en la caja 1"));
     pthread_mutex_unlock(&mutex_1);
 }
 
@@ -193,7 +194,7 @@ void *caja_2(void *prc){
     Cliente* cliente = (Cliente*)prc;
     if(cliente->problema_precio==1){
         //Llamamos al repo
-        msg = "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 2";
+        strcpy(msg, "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 2");
         pthread_mutex_lock(&mutex_repo);
         pthread_cond_signal(&cond_repo);
         pthread_mutex_unlock(&mutex_repo);
@@ -206,7 +207,7 @@ void *caja_2(void *prc){
     }
     ingresosCaja2 = ingresosCaja2 + cliente->precio_compra;
     sleep(cliente->tiempo_caja);
-    writeLogMessage(cliente->nombre, msg + "Ha sido atendido en la caja 2");
+    writeLogMessage(cliente->nombre,strcat(msg,"Ha sido atendido en la caja 2"));
     pthread_mutex_unlock(&mutex_2);
 }
 
@@ -220,7 +221,7 @@ void *caja_3(void *prc){
     Cliente* cliente = (Cliente*)prc;
     if(cliente->problema_precio==1){
         //Llamamos al repo
-        msg = "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 3";
+        strcpy(msg, "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 3");
         pthread_mutex_lock(&mutex_repo);
         pthread_cond_signal(&cond_repo);
         pthread_mutex_unlock(&mutex_repo);
@@ -233,7 +234,7 @@ void *caja_3(void *prc){
     }
     ingresosCaja2 = ingresosCaja2 + cliente->precio_compra;
     sleep(cliente->tiempo_caja);
-    writeLogMessage(cliente->nombre, msg + "Ha sido atendido en la caja 1");
+    writeLogMessage(cliente->nombre,strcat(msg,"Ha sido atendido en la caja 3"));
     pthread_mutex_unlock(&mutex_3);
 }
 
@@ -250,7 +251,7 @@ void writeLogMessage(char *id, char *msg) {
     strftime(stnow, 25, "%d/%m/%y %H:%M:%S", tlocal);
     
     // Escribimos en el log
-    logFile = fopen(logFileName, "a");
+    FILE *logFile = fopen(logFileName, "a");
     fprintf(logFile, "[%s] %s: %s\n", stnow, id, msg);
     fclose(logFile);
 }
@@ -277,18 +278,32 @@ int main() {
     sigaction(SIGUSR1, &sa, NULL);
 
     memset(&sa_ignore, 0, sizeof(sa_ignore));
-    sa_ignore.sa_handler = SIGUSR1;
+    sa_ignore.sa_handler = SIG_IGN;
 
 
     int cliente_1 = -1;
     int cliente_2 = -1;
     int cliente_3 = -1;
 
+    int errorCaja1crate = 0;
+    int errorCaja2crate = 0;
+    int errorCaja3crate = 0;
+    int errorCaja1join = 0;
+    int errorCaja2join = 0;
+    int errorCaja3join = 0;
+
     while(1){
         cliente_1 = cliente_libre();
         if(cliente_1!=-1){
             pthread_mutex_lock(&sem_clientes[cliente_1]);
-            pthread_create(&caja1, NULL, caja_1, *clientes[cliente_1]);
+            errorCaja1crate = pthread_create(&caja1, NULL, caja_1, &clientes[cliente_1]);
+            if(errorCaja1crate!=0){
+                printf("Error al crear el hilo de la caja 1\n");
+            }
+            errorCaja1join = pthread_join(caja1, NULL);
+            if(errorCaja1join!=0){
+                printf("Error al hacer join del hilo de la caja 1\n");
+            }
             iniciarCliente(&clientes[cliente_1]);
             cliente_1=-1;
             pthread_mutex_unlock(&sem_clientes[cliente_1]);
@@ -296,7 +311,14 @@ int main() {
         cliente_2 = cliente_libre();
         if(cliente_2!=-1){
             pthread_mutex_lock(&sem_clientes[cliente_2]);
-            pthread_create(&caja2, NULL, caja_2, *clientes[cliente_2]);
+            errorCaja2crate = pthread_create(&caja2, NULL, caja_2, &clientes[cliente_2]);
+            if(errorCaja2crate!=0){
+                printf("Error al crear el hilo de la caja 2\n");
+            }
+            errorCaja2join = pthread_join(caja2, NULL);
+            if(errorCaja2join!=0){
+                printf("Error al hacer join del hilo de la caja 2\n");
+            }
             iniciarCliente(&clientes[cliente_2]);
             cliente_2=-1;
             pthread_mutex_unlock(&sem_clientes[cliente_2]);
@@ -304,7 +326,14 @@ int main() {
         cliente_3 = cliente_libre();
         if(cliente_3!=-1){
             pthread_mutex_lock(&sem_clientes[cliente_3]);
-            pthread_create(&caja3, NULL, caja_3, *clientes[cliente_3]);
+            errorCaja3crate = pthread_create(&caja3, NULL, caja_3, &clientes[cliente_3]);
+            if(errorCaja3crate!=0){
+                printf("Error al crear el hilo de la caja 3\n");
+            }
+            errorCaja3join = pthread_join(caja3, NULL);
+            if(errorCaja3join!=0){
+                printf("Error al hacer join del hilo de la caja 3\n");
+            }
             iniciarCliente(&clientes[cliente_3]);
             cliente_3=-1;
             pthread_mutex_unlock(&sem_clientes[cliente_3]);
