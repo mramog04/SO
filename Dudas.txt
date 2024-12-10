@@ -1,0 +1,54 @@
+Manejador de Señales (Función handler)
+
+    Tienes:
+        Parecía no haber un manejo claro o seguro para la creación de clientes al recibir señales.
+        La asignación dinámica de memoria en el manejador podría causar problemas si no se liberaba adecuadamente.
+    Deberias:
+        Se eliminó la asignación dinámica dentro del manejador.
+        Se utiliza la lista estática clientes[] protegida por un pthread_mutex.
+        Se valida que no se supere el límite de clientes (MAX_CLIENTES).
+        Se utiliza pthread_cond_signal para notificar al cajero cuando hay nuevos clientes.
+    Motivo:
+        Mejor manejo de recursos compartidos y sincronización para evitar condiciones de carrera y accesos inválidos.
+
+2. Uso de Mutex y Variables de Condición
+
+    Tienes:
+        No se observó un uso claro y consistente de mutex para proteger recursos compartidos como clientes[] y num_clientes.
+    Deberias:
+        Se utiliza pthread_mutex para proteger el acceso a la lista de clientes y el log.
+        Se introduce pthread_cond_t para que el cajero espere hasta que haya clientes disponibles.
+    Motivo:
+        Evitar condiciones de carrera y garantizar acceso seguro a recursos compartidos.
+
+3. Función del Cajero
+
+    Tienes:
+        No estaba claro cómo el cajero obtenía clientes para atenderlos.
+    Deberias:
+        El cajero entra en espera (pthread_cond_wait) si no hay clientes.
+        Cuando un cliente está disponible, se toma de la lista de manera segura usando mutex.
+    Motivo:
+        Sincronización adecuada entre cajero y clientes para evitar accesos simultáneos o erróneos.
+
+4. Función para Inicializar Clientes (Función iniciarCliente)
+
+    Tienes:
+        No estaba claro cómo se inicializaban los datos de los clientes.
+    Deberias:
+        Se crea una función específica para inicializar cada cliente con valores predecibles:
+            Un ID único.
+            Nombre generado dinámicamente (Cliente_1, Cliente_2, etc.).
+            Tiempo de atención aleatorio entre 1 y 5 segundos.
+    Motivo:
+        Mejor organización del código y evitar problemas con datos no inicializados.
+
+5. Gestión de Recursos Compartidos
+
+    Tienes:
+        Parecía haber un manejo inconsistente de la lista de clientes.
+    Deberias:
+        La lista de clientes (clientes[]) es estática, y su acceso está protegido por mutex.
+        Se reduce el tamaño (num_clientes) cuando un cliente es atendido.
+    Motivo:
+        Evitar corrupción de memoria y garantizar un acceso coherente a los datos compartidos.

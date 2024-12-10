@@ -66,6 +66,7 @@ void iniciarCliente(void *prc){
     cliente->problema_precio = 0;
     cliente->problema_pagar = 0;
     cliente->tiempo_cansado = 0;
+    //free(cliente);
 }
 
 
@@ -102,7 +103,7 @@ void handler(int sig) {
                     args->numCliente = i;
                     pthread_create(&hilos_clientes[i], NULL, cliente, args);
                     num_clientes++;
-                    free(args);
+                    //free(args);
                     break;
                 }
             }
@@ -111,6 +112,7 @@ void handler(int sig) {
             printf("Nuevo cliente: %s\n", new_cliente->nombre);
             sigaction(SIGUSR1, &sa, NULL);
             free(args);
+            free(new_cliente);
         }
     }
 }
@@ -139,21 +141,22 @@ int cliente_libre(){
 void *cliente(void *args){
     argsHiloCliente* args2 = (argsHiloCliente*)args;
     int numCliente = args2->numCliente;
-    Cliente* cliente = &clientes[numCliente];
-    if(cliente->tiempo_cansado == 1) {
+    Cliente cliente = clientes[numCliente];
+    if(cliente.tiempo_cansado == 1) {
         sleep(10);
-        pthread_mutex_lock(&sem_clientes[cliente->cliente_id]);
-        if(clientes[cliente->cliente_id].cliente_id == -1) {
-            pthread_mutex_unlock(&sem_clientes[cliente->cliente_id]);
+        pthread_mutex_lock(&sem_clientes[cliente.cliente_id]);
+        if(clientes[cliente.cliente_id].cliente_id == -1) {
+            pthread_mutex_unlock(&sem_clientes[cliente.cliente_id]);
             pthread_exit(NULL);
         }
         pthread_mutex_lock(&mutex_log);
-        writeLogMessage(cliente->nombre, "Cliente cansado, se marcha de la cola");
+        writeLogMessage(cliente.nombre, "Cliente cansado, se marcha de la cola");
         pthread_mutex_unlock(&mutex_log);
-        iniciarCliente(&clientes[cliente->cliente_id]);
-        pthread_mutex_unlock(&sem_clientes[cliente->cliente_id]);
+        iniciarCliente(&clientes[cliente.cliente_id]);
+        pthread_mutex_unlock(&sem_clientes[cliente.cliente_id]);
         pthread_exit(NULL);
     }
+    free(args2);   //probablemente esto tendre que tenerlo pero demomento lo dejo comentado
 }
 
 
@@ -182,6 +185,7 @@ void *caja_1(void *prc){
     sleep(cliente->tiempo_caja);
     writeLogMessage(cliente->nombre, strcat(msg,"Ha sido atendido en la caja 1"));
     pthread_mutex_unlock(&mutex_1);
+    free(cliente);
 }
 
 void *caja_2(void *prc){
@@ -209,6 +213,7 @@ void *caja_2(void *prc){
     sleep(cliente->tiempo_caja);
     writeLogMessage(cliente->nombre,strcat(msg,"Ha sido atendido en la caja 2"));
     pthread_mutex_unlock(&mutex_2);
+    free(cliente);
 }
 
 void *caja_3(void *prc){
@@ -236,6 +241,7 @@ void *caja_3(void *prc){
     sleep(cliente->tiempo_caja);
     writeLogMessage(cliente->nombre,strcat(msg,"Ha sido atendido en la caja 3"));
     pthread_mutex_unlock(&mutex_3);
+    free(cliente);
 }
 
 void *reponer(void *prc){
