@@ -20,7 +20,6 @@ int main(int argc,char *argv[]){
             printf("No such file or directory\n");
             exit(0);
         }else{
-            
             desc = open(path,O_RDWR);
             read(desc,mensj,1024);
             mensj[sizeof(mensj)-1] = '\0';

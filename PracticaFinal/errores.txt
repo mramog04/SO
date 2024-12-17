@@ -1,63 +1,9 @@
-./PracticaFinal/Supermercado.c: In function ‘handler’:
-./PracticaFinal/Supermercado.c:80:13: error: too many arguments to function ‘strcpy’
-   80 |             strcpy(new_cliente->nombre, "cliente_%d", num_clientes+1);
-      |             ^~~~~~
-In file included from ./PracticaFinal/Supermercado.c:8:
-/usr/include/string.h:141:14: note: declared here
-  141 | extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
-      |              ^~~~~~
-./PracticaFinal/Supermercado.c: In function ‘cliente’:
-./PracticaFinal/Supermercado.c:139:22: error: ‘args’ redeclared as different kind of symbol
-  139 |     argsHiloCliente* args = (argsHiloCliente*)args;
-      |                      ^~~~
-./PracticaFinal/Supermercado.c:138:21: note: previous definition of ‘args’ with type ‘void *’
-  138 | void *cliente(void *args){
-      |               ~~~~~~^~~~
-./PracticaFinal/Supermercado.c:145:28: error: ‘cliente’ is a pointer; did you mean to use ‘->’?
-  145 |         if(clientes[cliente.cliente_id].cliente_id == -1) {
-      |                            ^
-      |                            ->
-In file included from /usr/include/string.h:33,
-                 from ./PracticaFinal/Supermercado.c:8:
-./PracticaFinal/Supermercado.c:152:41: error: incompatible types when assigning to type ‘Cliente’ from type ‘void *’
-  152 |         clientes[cliente->cliente_id] = NULL;
-      |                                         ^~~~
-./PracticaFinal/Supermercado.c: In function ‘caja_1’:
-./PracticaFinal/Supermercado.c:169:13: error: assignment to expression with array type
-  169 |         msg = "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 1";
-      |             ^
-./PracticaFinal/Supermercado.c:182:42: error: invalid operands to binary + (have ‘char *’ and ‘char *’)
-  182 |     writeLogMessage(cliente->nombre, msg + "Ha sido atendido en la caja 1");
-      |                                      ~~~ ^
-      |                                      |   |
-      |                                      |   char *
-      |                                      char *
-./PracticaFinal/Supermercado.c: In function ‘caja_2’:
-./PracticaFinal/Supermercado.c:196:13: error: assignment to expression with array type
-  196 |         msg = "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 2";
-      |             ^
-./PracticaFinal/Supermercado.c:209:42: error: invalid operands to binary + (have ‘char *’ and ‘char *’)
-  209 |     writeLogMessage(cliente->nombre, msg + "Ha sido atendido en la caja 2");
-      |                                      ~~~ ^
-      |                                      |   |
-      |                                      |   char *
-      |                                      char *
-./PracticaFinal/Supermercado.c: In function ‘caja_3’:
-./PracticaFinal/Supermercado.c:223:13: error: assignment to expression with array type
-  223 |         msg = "Ha habido un problema con el precio y se ha llamado al reponedor, en la caja 3";
-      |             ^
-./PracticaFinal/Supermercado.c:236:42: error: invalid operands to binary + (have ‘char *’ and ‘char *’)
-  236 |     writeLogMessage(cliente->nombre, msg + "Ha sido atendido en la caja 1");
-      |                                      ~~~ ^
-      |                                      |   |
-      |                                      |   char *
-      |                                      char *
 ./PracticaFinal/Supermercado.c: In function ‘writeLogMessage’:
-./PracticaFinal/Supermercado.c:253:13: error: assignment to expression with array type
-  253 |     logFile = fopen(logFileName, "a");
+./PracticaFinal/Supermercado.c:254:13: error: assignment to expression with array type
+  254 |     logFile = fopen(logFileName, "a");
       |             ^
-./PracticaFinal/Supermercado.c:254:13: warning: passing argument 1 of ‘fprintf’ from incompatible pointer type [-Wincompatible-pointer-types]
-  254 |     fprintf(logFile, "[%s] %s: %s\n", stnow, id, msg);
+./PracticaFinal/Supermercado.c:255:13: warning: passing argument 1 of ‘fprintf’ from incompatible pointer type [-Wincompatible-pointer-types]
+  255 |     fprintf(logFile, "[%s] %s: %s\n", stnow, id, msg);
       |             ^~~~~~~
       |             |
       |             char *
@@ -65,8 +11,8 @@ In file included from ./PracticaFinal/Supermercado.c:1:
 /usr/include/stdio.h:350:38: note: expected ‘FILE * restrict’ but argument is of type ‘char *’
   350 | extern int fprintf (FILE *__restrict __stream,
       |                     ~~~~~~~~~~~~~~~~~^~~~~~~~
-./PracticaFinal/Supermercado.c:255:12: warning: passing argument 1 of ‘fclose’ from incompatible pointer type [-Wincompatible-pointer-types]
-  255 |     fclose(logFile);
+./PracticaFinal/Supermercado.c:256:12: warning: passing argument 1 of ‘fclose’ from incompatible pointer type [-Wincompatible-pointer-types]
+  256 |     fclose(logFile);
       |            ^~~~~~~
       |            |
       |            char *
@@ -74,16 +20,3 @@ In file included from ./PracticaFinal/Supermercado.c:1:
 /usr/include/stdio.h:178:26: note: expected ‘FILE *’ but argument is of type ‘char *’
   178 | extern int fclose (FILE *__stream);
       |                    ~~~~~~^~~~~~~~
-./PracticaFinal/Supermercado.c: In function ‘main’:
-./PracticaFinal/Supermercado.c:280:26: warning: assignment to ‘__sighandler_t’ {aka ‘void (*)(int)’} from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
-  280 |     sa_ignore.sa_handler = SIGUSR1;
-      |                          ^
-./PracticaFinal/Supermercado.c:291:50: error: invalid type argument of unary ‘*’ (have ‘Cliente’)
-  291 |             pthread_create(&caja1, NULL, caja_1, *clientes[cliente_1]);
-      |                                                  ^~~~~~~~~~~~~~~~~~~~
-./PracticaFinal/Supermercado.c:299:50: error: invalid type argument of unary ‘*’ (have ‘Cliente’)
-  299 |             pthread_create(&caja2, NULL, caja_2, *clientes[cliente_2]);
-      |                                                  ^~~~~~~~~~~~~~~~~~~~
-./PracticaFinal/Supermercado.c:307:50: error: invalid type argument of unary ‘*’ (have ‘Cliente’)
-  307 |             pthread_create(&caja3, NULL, caja_3, *clientes[cliente_3]);
-      |

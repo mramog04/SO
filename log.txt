@@ -1,14 +1,13 @@
-[10/12/24 13:06:02] cliente_1: Nuevo cliente en la cola
-[10/12/24 13:07:37] cliente_2: Nuevo cliente en la cola
-[10/12/24 13:15:45] cliente_1: Nuevo cliente en la cola
-[10/12/24 13:15:48] cliente_2: Nuevo cliente en la cola
-[10/12/24 13:15:49] cliente_3: Nuevo cliente en la cola
-[10/12/24 13:26:24] cliente_1: Nuevo cliente en la cola
-[10/12/24 13:26:27] cliente_2: Nuevo cliente en la cola
-[10/12/24 13:27:15] cliente_1: Nuevo cliente en la cola
-[10/12/24 13:27:16] cliente_2: Nuevo cliente en la cola
-[10/12/24 13:27:17] cliente_3: Nuevo cliente en la cola
-[10/12/24 13:27:17] cliente_4: Nuevo cliente en la cola
-[10/12/24 13:27:18] cliente_5: Nuevo cliente en la cola
-[10/12/24 13:27:18] cliente_6: Nuevo cliente en la cola
-[10/12/24 13:28:35] cliente_1: Nuevo cliente en la cola
+
+[17/12/24 13:47:29] cliente_2: Nuevo cliente en la cola
+[17/12/24 13:47:29] cliente_2: No se ha atendido al cliente en la caja 2
+[17/12/24 13:47:31] cliente_5: Nuevo cliente en la cola
+[17/12/24 13:47:33] cliente_5: Ha sido atendido en la caja 1
+[17/12/24 13:51:51] cliente_1: Nuevo cliente en la cola
+[17/12/24 13:51:51] cliente_1: No se ha atendido al cliente en la caja 1
+[17/12/24 13:51:54] cliente_2: Nuevo cliente en la cola
+[17/12/24 13:51:56] cliente_2: Ha sido atendido en la caja 2
+[17/12/24 13:57:33] cliente_1: Nuevo cliente en la cola
+[17/12/24 13:57:33] cliente_1: No se ha atendido al cliente en la caja 3
+[17/12/24 13:57:34] cliente_2: Nuevo cliente en la cola
+[17/12/24 13:57:36] cliente_2: Ha sido atendido en la caja 1
