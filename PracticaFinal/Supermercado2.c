@@ -145,7 +145,6 @@ void *cliente(void *args){
     argsHiloCliente* args2 = (argsHiloCliente*)args;
     int posCliente = args2->posCliente;
     free(args2);
-    //free(args2);
     pthread_mutex_lock(&sem_clientes[posCliente]);
     Cliente *cliente = &clientes[posCliente];
     int clienteId = cliente->cliente_id;
