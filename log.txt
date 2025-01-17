@@ -1,28 +1,87 @@
-[08/01/25 13:48:22] : Ha sido atendido en la caja 1
-[08/01/25 13:48:22] : Ha sido atendido en la caja 1
-[08/01/25 13:48:22] : Ha sido atendido en la caja 1
-[08/01/25 13:48:22] : Ha sido atendido en la caja 1
-[08/01/25 13:48:23] : Ha sido atendido en la caja 1
-[08/01/25 13:48:23] : Ha sido atendido en la caja 1
-[08/01/25 13:48:23] : Ha sido atendido en la caja 1
-[08/01/25 13:48:23] : Ha sido atendido en la caja 1
-[08/01/25 13:48:25] : Ha sido atendido en la caja 1
-[08/01/25 13:48:25] : Ha sido atendido en la caja 1
-[08/01/25 13:48:25] : Ha sido atendido en la caja 1
-[08/01/25 13:48:25] : Ha sido atendido en la caja 1
-[08/01/25 13:48:26] : Ha sido atendido en la caja 1
-[08/01/25 13:48:26] : Ha sido atendido en la caja 1
-[08/01/25 13:48:26] : Ha sido atendido en la caja 1
-[08/01/25 13:48:26] : Ha sido atendido en la caja 1
-[08/01/25 13:48:26] : Ha sido atendido en la caja 1
-[08/01/25 13:48:27] : Ha sido atendido en la caja 1
-[08/01/25 13:48:27] : Ha sido atendido en la caja 1
-[08/01/25 13:48:27] : Ha sido atendido en la caja 1
-[08/01/25 13:48:27] : Ha sido atendido en la caja 1
-[08/01/25 13:48:28] : Ha sido atendido en la caja 1
-[08/01/25 13:48:28] : Ha sido atendido en la caja 1
-[08/01/25 13:48:28] : Ha sido atendido en la caja 1
-[08/01/25 13:48:28] : Ha sido atendido en la caja 1
-[08/01/25 13:48:28] : Ha sido atendido en la caja 1
-[08/01/25 13:48:29] : Ha sido atendido en la caja 1
-[08/01/25 13:48:29] : Ha sido atendido en la caja 1
+
+[15/01/25 13:45:03] 0: Hora de la atencion de la compra
+[15/01/25 13:45:05] 0: Hora de llegada del cliente
+[15/01/25 13:45:07] 0: Compra realizada por un precio de : 16
+[15/01/25 13:45:36] 0: Finalizacion del cliente
+[15/01/25 13:46:11] 1: Hora de la atencion de la compra
+[15/01/25 13:46:12] 1: Compra realizada por un precio de : 93
+[15/01/25 13:46:13] 2: Hora de la atencion de la compra
+[15/01/25 13:46:14] 3: Hora de llegada del cliente
+[15/01/25 13:46:14] 2: Hora de llegada del cliente
+[15/01/25 13:46:14] 3: Hora de la atencion de la compra
+[15/01/25 13:46:15] 2: Compra realizada por un precio de : 64
+[15/01/25 13:46:15] 3: Compra realizada por un precio de : 41
+[15/01/25 13:46:16] 4: Hora de la atencion de la compra
+[15/01/25 13:46:17] 5: Hora de llegada del cliente
+[15/01/25 13:46:17] 4: Hora de llegada del cliente
+[15/01/25 13:46:17] 5: Hora de la atencion de la compra
+[15/01/25 13:46:18] 4: Compra realizada por un precio de : 68
+[15/01/25 13:46:19] 5: Compra realizada por un precio de : 83
+[15/01/25 13:46:19] 6: Hora de la atencion de la compra
+[15/01/25 13:46:20] 6: Hora de llegada del cliente
+[15/01/25 13:46:20] 7: Hora de llegada del cliente
+[15/01/25 13:46:20] 7: Hora de la atencion de la compra
+[15/01/25 13:46:20] 6: Compra realizada por un precio de : 30
+[15/01/25 13:46:22] 8: Hora de la atencion de la compra
+[15/01/25 13:46:23] 9: Hora de llegada del cliente
+[15/01/25 13:46:23] 8: Hora de llegada del cliente
+[15/01/25 13:46:23] 7: Compra realizada por un precio de : 68
+[15/01/25 13:46:23] 9: Hora de la atencion de la compra
+[15/01/25 13:46:24] 10: Hora de la atencion de la compra
+[15/01/25 13:46:25] 8: Compra realizada por un precio de : 43
+[15/01/25 13:46:25] 11: Hora de la atencion de la compra
+[15/01/25 13:46:26] 10: Hora de llegada del cliente
+[15/01/25 13:46:26] 11: Hora de llegada del cliente
+[15/01/25 13:46:26] 12: Hora de llegada del cliente
+[15/01/25 13:46:26] 10: Compra realizada por un precio de : 38
+[15/01/25 13:46:26] 12: Hora de la atencion de la compra
+[15/01/25 13:46:27] 9: Compra realizada por un precio de : 71
+[15/01/25 13:46:28] 13: Hora de la atencion de la compra
+[15/01/25 13:46:29] 13: Hora de llegada del cliente
+[15/01/25 13:46:29] 14: Hora de llegada del cliente
+[15/01/25 13:46:29] 15: Hora de llegada del cliente
+[15/01/25 13:46:30] 11: Compra realizada por un precio de : 74
+[15/01/25 13:46:30] 14: Hora de la atencion de la compra
+[15/01/25 13:46:32] 20: Hora de llegada del cliente
+[15/01/25 13:46:32] 18: Hora de llegada del cliente
+[15/01/25 13:46:32] 17: Hora de llegada del cliente
+[15/01/25 13:46:32] 19: Hora de llegada del cliente
+[15/01/25 13:46:32] 16: Hora de llegada del cliente
+[15/01/25 13:46:32] 13: Compra realizada por un precio de : 37
+[15/01/25 13:46:32] 15: Hora de la atencion de la compra
+[15/01/25 13:46:33] 12: Compra realizada por un precio de : 47
+[15/01/25 13:46:33] 14: Compra realizada por un precio de : 96
+[15/01/25 13:46:33] 16: Hora de la atencion de la compra
+[15/01/25 13:46:33] 15: Compra realizada por un precio de : 14
+[15/01/25 13:46:33] 17: Hora de la atencion de la compra
+[15/01/25 13:46:33] 18: Hora de la atencion de la compra
+[15/01/25 13:46:34] 17: Compra realizada por un precio de : 35
+[15/01/25 13:46:34] 19: Hora de la atencion de la compra
+[15/01/25 13:46:36] 3: Finalizacion del cliente
+[15/01/25 13:46:36] 16: Compra realizada por un precio de : 51
+[15/01/25 13:46:36] 20: Hora de la atencion de la compra
+[15/01/25 13:46:38] 18: Compra realizada por un precio de : 77
+[15/01/25 13:46:38] 21: Hora de la atencion de la compra
+[15/01/25 13:46:39] 5: Finalizacion del cliente
+[15/01/25 13:46:42] 21: Compra realizada por un precio de : 52
+[15/01/25 13:46:43] 20: Compra realizada por un precio de : 55
+[15/01/25 13:46:46] 2: Finalizacion del cliente
+[15/01/25 13:46:49] 19: Compra realizada por un precio de : 33
+[15/01/25 13:46:52] 6: Finalizacion del cliente
+[15/01/25 13:46:53] 4: Finalizacion del cliente
+[15/01/25 13:46:53] 7: Finalizacion del cliente
+[15/01/25 13:46:53] 20: Finalizacion del cliente
+[15/01/25 13:46:56] 16: Finalizacion del cliente
+[15/01/25 13:47:00] 9: Finalizacion del cliente
+[15/01/25 13:47:00] 12: Finalizacion del cliente
+[15/01/25 13:47:04] 10: Finalizacion del cliente
+[15/01/25 13:47:04] 15: Finalizacion del cliente
+[15/01/25 13:47:10] 14: Finalizacion del cliente
+[15/01/25 13:47:12] 11: Finalizacion del cliente
+[15/01/25 13:47:12] 19: Finalizacion del cliente
+[15/01/25 13:47:15] 13: Finalizacion del cliente
+[15/01/25 13:47:16] 8: Finalizacion del cliente
+[15/01/25 13:47:22] 17: Finalizacion del cliente
+[15/01/25 13:47:23] 18: Finalizacion del cliente
+[15/01/25 13:47:34] 22: Hora de la atencion de la compra
+[15/01/25 13:47:36] 22: Compra realizada por un precio de : 40

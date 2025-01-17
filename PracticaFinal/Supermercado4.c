@@ -82,7 +82,7 @@ int main() {
         clientes[i].id = -1;
         clientes[i].estado = -1;
         clientes[i].posClientes = i;
-        pthread_create(hilos_clientes[i], NULL, cliente, &clientes[i]);
+        pthread_create(&hilos_clientes[i], NULL, cliente, &clientes[i]);
         pthread_mutex_unlock(&sem_clientes);
     }
 
@@ -110,8 +110,11 @@ int main() {
         exit(0);
     }
 
-
-    pause();
+    while (1){
+        pause();
+        sleep(1);
+    }
+    
     
 }
 
@@ -133,54 +136,59 @@ void writeLogMessage(char *id, char *msg) {
 
 
 void handler(int sig){
+    printf("Se ha recibido la señal SIGUSR1\n");
     pthread_mutex_lock(&sem_clientes);
-    Cliente cliente;
     for (int i = 0; i < 20; i++) {
-        pthread_mutex_lock(&sem_clientes[i]);
+        /* pthread_mutex_lock(&sem_clientes); */
         if (clientes[i].estado == -1) {
-            cliente[i].estado = 0;
+            clientes[i].estado = 0;
             pthread_mutex_lock(&mutex_numClientes);
-            cliente[i].id = numClientes;
+            clientes[i].id = numClientes;
             numClientes++;
             pthread_mutex_unlock(&mutex_numClientes);
-            cliente = clientes[i];
             break;
         }
     }
     pthread_mutex_unlock(&sem_clientes);
-
-    return NULL;
 }
 
 void *hcajero1(void *args){
 
-    Cliente cliente;
 
-
+    sleep(5);
     while (1) {
         int menorId = -1;
         int menorIndice = -1;
+        Cliente *Ptrcliente = NULL;
 
         pthread_mutex_lock(&sem_clientes);
         for (int i = 0; i < 20; i++) {
-            if (clientes[i].id != -1 && (menorId == -1 || clientes[i].id < menorId)) {
+            if (clientes[i].id != -1 && (menorId == -1 || clientes[i].id < menorId) && clientes[i].estado == 0) {
                 menorId = clientes[i].id;
                 menorIndice = i;
+                printf("Cliente con menor id: %d cuyo estado es %d atendido en la caja 1\n", clientes[i].id, clientes[i].estado);
             }
         }
 
         if (menorIndice != -1) {
             printf("Cliente con menor id: %d\n", clientes[menorIndice].id);
-            cliente = clientes[menorIndice];
-            cliente.estado = 1;
+            Ptrcliente = &clientes[menorIndice];
+            Ptrcliente->estado = 1;
+        }else{
+            pthread_mutex_unlock(&sem_clientes);
+            printf("No hay clientes en la caja 1\n");
+            sleep(1);
+            continue;
         }
 
         pthread_mutex_unlock(&sem_clientes);
 
         int tiempoCaja = (rand() % 5) + 1;
 
+        char charId[3];
+        sprintf(charId, "%d", Ptrcliente->id);
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id, "Hora de la atencion de la compra");
+        writeLogMessage(charId, "Hora de la atencion de la compra");
         pthread_mutex_unlock(&sem_logs);
 
         sleep(tiempoCaja);
@@ -192,20 +200,26 @@ void *hcajero1(void *args){
             pthread_mutex_unlock(&mutex_repo);
         } else if (numAleatorio > 95) {
             pthread_mutex_lock(&sem_logs);
-            writeLogMessage(cliente.id, "Problema con el pago");
+            writeLogMessage(charId, "Problema con el pago");
             pthread_mutex_unlock(&sem_logs);
             /* exit(0); */
         }
 
         int precioCompra = (rand() % 100) + 1;
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id, "Compra realizada por un precio de : %d", precioCompra);
+        char charPrecioCompra[80];
+        strcpy(charPrecioCompra, "Compra realizada por un precio de : ");
+        char PrecioCompra[3];
+        sprintf(PrecioCompra, "%d", precioCompra);
+        strcat(charPrecioCompra, PrecioCompra);
+        writeLogMessage(charId, charPrecioCompra);
         pthread_mutex_unlock(&sem_logs);
 
-        cliente.estado = 2;
+        Ptrcliente->estado = 2;
 
         pthread_mutex_lock(&mutex_Ccajero1);
-        if (Ccajero1 == 20) {
+        if (Ccajero1 == 10) {
+            writeLogMessage(charId, "La caja 1 se va a tomar un descanso");
             sleep(20);
             Ccajero1 = 0;
         } else {
@@ -220,31 +234,42 @@ void *hcajero1(void *args){
 void *hcajero2(void *args){
 
 
-
+    sleep(3);
     while (1) {
+        
         int menorId = -1;
         int menorIndice = -1;
+        Cliente *Ptrcliente = NULL;
 
         pthread_mutex_lock(&sem_clientes);
         for (int i = 0; i < 20; i++) {
-            if (clientes[i].id != -1 && (menorId == -1 || clientes[i].id < menorId)) {
+            if (clientes[i].id != -1 && (menorId == -1 || clientes[i].id < menorId) && clientes[i].estado == 0) {
                 menorId = clientes[i].id;
                 menorIndice = i;
+                printf("Cliente con menor id: %d cuyo estado es %d atendido en la caja 2\n", clientes[i].id, clientes[i].estado);                
             }
         }
 
         if (menorIndice != -1) {
             printf("Cliente con menor id: %d\n", clientes[menorIndice].id);
-            cliente = clientes[menorIndice];
-            cliente.estado = 1;
+            Ptrcliente = &clientes[menorIndice];
+            Ptrcliente->estado = 1;
+        }else{
+            pthread_mutex_unlock(&sem_clientes);
+            printf("No hay clientes en la caja 2\n");
+            sleep(1);
+            continue;
         }
 
         pthread_mutex_unlock(&sem_clientes);
 
         int tiempoCaja = (rand() % 5) + 1;
+
+        char charId[3];
+        sprintf(charId, "%d", Ptrcliente->id);
         
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id, "Hora de la atencion de la compra");
+        writeLogMessage(charId, "Hora de la atencion de la compra");
         pthread_mutex_unlock(&sem_logs);
         
         sleep(tiempoCaja);
@@ -256,20 +281,26 @@ void *hcajero2(void *args){
             pthread_mutex_unlock(&mutex_repo);
         }else if(numAleatorio > 95){
             pthread_mutex_lock(&sem_logs);
-            writeLogMessage(cliente.id, "Problema con el pago");
+            writeLogMessage(charId, "Problema con el pago");
             pthread_mutex_unlock(&sem_logs);
             /* exit(0); */
         }
 
         int precioCompra = (rand() % 100) + 1;
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id, "Compra realizada por un precio de : %d", precioCompra);
+        char charPrecioCompra[80];
+        strcpy(charPrecioCompra, "Compra realizada por un precio de : ");
+        char PrecioCompra[3];
+        sprintf(PrecioCompra, "%d", precioCompra);
+        strcat(charPrecioCompra, PrecioCompra);
+        writeLogMessage(charId, charPrecioCompra);
         pthread_mutex_unlock(&sem_logs);
 
-        cliente.estado = 2;
+        Ptrcliente->estado = 2;
 
         pthread_mutex_lock(&mutex_Ccajero2);
-        if(Ccajero2==20){
+        if(Ccajero2==10){
+            writeLogMessage(charId, "La caja 2 se va a tomar un descanso");
             sleep(20);
             Ccajero2=0;
         }else{
@@ -283,32 +314,41 @@ void *hcajero2(void *args){
 
 void *hcajero3(void *args){
 
-    Cliente cliente;
-
+    sleep(2);
     while (1) {
+        Cliente *Ptrcliente = NULL;
         int menorId = -1;
         int menorIndice = -1;
 
         pthread_mutex_lock(&sem_clientes);
         for (int i = 0; i < 20; i++) {
-            if (clientes[i].id != -1 && (menorId == -1 || clientes[i].id < menorId)) {
+            if (clientes[i].id != -1 && (menorId == -1 || clientes[i].id < menorId) && clientes[i].estado == 0) {
                 menorId = clientes[i].id;
                 menorIndice = i;
+                printf("Cliente con menor id: %d cuyo estado es %d atendido en la caja 3\n", clientes[i].id, clientes[i].estado);
             }
         }
 
         if (menorIndice != -1) {
             printf("Cliente con menor id: %d\n", clientes[menorIndice].id);
-            cliente = clientes[menorIndice];
-            cliente.estado = 1;
+            Ptrcliente = &clientes[menorIndice];
+            Ptrcliente->estado = 1;
+        }else{
+            pthread_mutex_unlock(&sem_clientes);
+            printf("No hay clientes en la caja 3\n");
+            sleep(1);
+            continue;
         }
 
         pthread_mutex_unlock(&sem_clientes);
 
         int tiempoCaja = (rand() % 5) + 1;
+
+        char charId[3];
+        sprintf(charId, "%d", Ptrcliente->id);
         
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id, "Hora de la atencion de la compra");
+        writeLogMessage(charId, "Hora de la atencion de la compra");
         pthread_mutex_unlock(&sem_logs);
         
         sleep(tiempoCaja);
@@ -320,20 +360,27 @@ void *hcajero3(void *args){
             pthread_mutex_unlock(&mutex_repo);
         }else if(numAleatorio > 95){
             pthread_mutex_lock(&sem_logs);
-            writeLogMessage(cliente.id, "Problema con el pago");
+            writeLogMessage(charId, "Problema con el pago");
             pthread_mutex_unlock(&sem_logs);
             /* exit(0); */
         }
 
         int precioCompra = (rand() % 100) + 1;
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id, "Compra realizada por un precio de : %d", precioCompra);
+        /* writeLogMessage(charId, "Compra realizada por un precio de : %d" ,precioCompra); */
+        char charPrecioCompra[80];
+        strcpy(charPrecioCompra, "Compra realizada por un precio de : ");
+        char PrecioCompra[3];
+        sprintf(PrecioCompra, "%d", precioCompra);
+        strcat(charPrecioCompra, PrecioCompra);
+        writeLogMessage(charId, charPrecioCompra);
         pthread_mutex_unlock(&sem_logs);
 
-        cliente.estado = 2;
+        Ptrcliente->estado = 2;
 
         pthread_mutex_lock(&mutex_Ccajero3);
-        if(Ccajero3==20){
+        if(Ccajero3==10){
+            writeLogMessage(charId, "La caja 3 se va a tomar un descanso");
             sleep(20);
             Ccajero3=0;
         }else{
@@ -345,42 +392,45 @@ void *hcajero3(void *args){
     pthread_exit(NULL);
 }
 
-void cliente(void *args){
+void *cliente(void *args){
 
-    Cliente cliente = *((Cliente *)args);
+    Cliente *cliente = (Cliente *)args;
 
-    while(clientes[i].estado==-1){
+    while(cliente->estado==-1){
         sleep(3);
     }
 
+    char charId[3];
+    sprintf(charId, "%d", cliente->id);
+
     pthread_mutex_lock(&sem_logs);
-    writeLogMessage(cliente.id,"Hora de llegada del cliente");
+    writeLogMessage(charId,"Hora de llegada del cliente");
     pthread_mutex_unlock(&sem_logs);
 
     int tiempoCansado = (rand() % 35) + 20;
     sleep(tiempoCansado);
-    if(cliente.estado==0){
+    if(cliente->estado==0){
         pthread_mutex_lock(&sem_logs);
-        writeLogMessage(cliente.id,"El cliente se ha marchado sin ser atendido");
+        writeLogMessage(charId,"El cliente se ha marchado sin ser atendido");
         pthread_mutex_unlock(&sem_logs);
-        cliente.estado=2;
+        cliente->estado=2;
     }
-    while (cliente.estado != 2) {
+    while (cliente->estado != 2) {
         sleep(2);
     }
 
     pthread_mutex_lock(&sem_logs);
-    writeLogMessage(cliente.clienteid,"Finalizacion del cliente");
+    writeLogMessage(charId,"Finalizacion del cliente");
     pthread_mutex_unlock(&sem_logs);
 
-    pthread_mutex_lock(&sem_clientes);
     pthread_mutex_lock(&mutex_numClientes);
-    cliente.id = numClientes;
-    numClientes++;
+    pthread_mutex_lock(&sem_clientes);
+    cliente->id = -1;
+    cliente->estado = -1;
     pthread_mutex_unlock(&sem_clientes);
     pthread_mutex_unlock(&mutex_numClientes);
 
-
+    pthread_exit(NULL);
 }
 
 void *hreponedor(void *prc){
